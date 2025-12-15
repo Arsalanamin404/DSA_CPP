@@ -1,118 +1,120 @@
 #include <iostream>
 #include <vector>
 
+#define MAX_ROWS 30
+#define MAX_COLS 30
+
 using namespace std;
 
-void setMatrix(vector<vector<int>> &matrix, int rows, int cols)
+class Matrix
 {
-    cout << "Enter " << rows * cols << " elements: " << endl;
-    for (int i = 0; i < rows; i++)
-    {
-        for (int j = 0; j < cols; j++)
-            cin >> matrix[i][j];
-    }
-}
+private:
+    int arr[MAX_ROWS][MAX_COLS];
+    int rows, cols;
 
-void getMatrix(const vector<vector<int>> &matrix, int rows, int cols)
-{
-    for (int i = 0; i < rows; i++)
-    {
-        for (int j = 0; j < cols; j++)
-            cout << matrix[i][j] << " ";
-        cout << endl;
-    }
-}
+public:
+    Matrix(int rows, int cols) : rows(rows), cols(cols) {}
 
-void MatrixAddition(const vector<vector<int>> &matrix_A, const vector<vector<int>> &matrix_B, int m, int n, int p, int q)
-{
-    if (m != p || n != q)
+    void input()
     {
-        cout << "ERROR: Matrix Addition not possible. Invalid Matrix Dimensions!" << endl;
-        return;
+        cout << "ENTER " << rows * cols << " MATRIX ELEMENTS: " << endl;
+        for (int i = 0; i < rows; i++)
+            for (int j = 0; j < cols; j++)
+                cin >> arr[i][j];
     }
 
-    vector<vector<int>> result(m, vector<int>(n));
-    for (int i = 0; i < m; i++)
+    void display()
     {
-        for (int j = 0; j < q; j++)
-            result[i][j] = matrix_A[i][j] + matrix_B[i][j];
-    }
-    cout << "Matrix Addition:" << endl;
-    cout << "------------------" << endl;
-    getMatrix(result, m, q);
-}
-
-void MatrixSubtraction(const vector<vector<int>> &matrix_A, const vector<vector<int>> &matrix_B, int m, int n, int p, int q)
-{
-    if (m != p || n != q)
-    {
-        cout << "ERROR: Matrix Subtraction not possible. Invalid Matrix Dimensions!" << endl;
-        return;
-    }
-
-    vector<vector<int>> result(m, vector<int>(n));
-    for (int i = 0; i < m; i++)
-    {
-        for (int j = 0; j < q; j++)
-            result[i][j] = matrix_A[i][j] - matrix_B[i][j];
-    }
-    cout << "Matrix Subtraction:" << endl;
-    cout << "------------------" << endl;
-    getMatrix(result, m, q);
-}
-
-void MatrixMultiplication(const vector<vector<int>> &matrix_A, const vector<vector<int>> &matrix_B, int m, int n, int p, int q)
-{
-    if (n != p)
-    {
-        cout << "ERROR: Matrix Multiplication not possible. Invalid Matrix Dimensions! " << endl;
-        return;
-    }
-
-    vector<vector<int>> result(m, vector<int>(q));
-    for (int i = 0; i < m; i++)
-    {
-        for (int j = 0; j < q; j++)
+        for (int i = 0; i < rows; i++)
         {
-            int sum = 0;
-            for (int k = 0; k < n; k++)
-                sum += matrix_A[i][k] * matrix_B[k][j];
-            result[i][j] = sum;
+            {
+                for (int j = 0; j < cols; j++)
+                    cout << arr[i][j] << " ";
+            }
+            cout << endl;
         }
     }
-    cout << "Resultant Matrix:" << endl;
-    cout << "------------------" << endl;
-    getMatrix(result, m, q);
-}
+
+    Matrix add(const Matrix &other)
+    {
+        Matrix result(rows, cols);
+
+        if (rows != other.rows || cols != other.cols)
+        {
+            cout << "MATRIX ADDITION NOT POSSIBLE::INVALID MATRIX DIMENSIONS";
+            return result;
+        }
+        for (int i = 0; i < rows; i++)
+            for (int j = 0; j < cols; j++)
+                result.arr[i][j] = this->arr[i][j] + other.arr[i][j];
+
+        return result;
+    }
+
+    Matrix subtract(const Matrix &other)
+    {
+        Matrix result(rows, cols);
+
+        if (rows != other.rows || cols != other.cols)
+        {
+            cout << "MATRIX ADDITION NOT POSSIBLE::INVALID MATRIX DIMENSIONS";
+            return result;
+        }
+        for (int i = 0; i < rows; i++)
+            for (int j = 0; j < cols; j++)
+                result.arr[i][j] = this->arr[i][j] - other.arr[i][j];
+
+        return result;
+    }
+
+    Matrix product(const Matrix &other)
+    {
+        Matrix result(rows, other.cols);
+        if (this->cols != other.rows)
+        {
+            cout << "ERROR: Matrix Multiplication not possible. Invalid Matrix Dimensions! " << endl;
+            return result;
+        }
+
+        for (int i = 0; i < rows; i++)
+        {
+            for (int j = 0; j < other.cols; j++)
+            {
+                result.arr[i][j] = 0;
+                for (int k = 0; k < cols; k++)
+                {
+                    result.arr[i][j] += this->arr[i][k] * other.arr[k][j];
+                }
+            }
+        }
+        return result;
+    }
+};
 
 int main()
 {
-    int m, n, p, q;
-    cout << "ENTER DIMENSIONS OF MATRIX 1 (m n): ";
-    cin >> m >> n;
-    cout << "ENTER DIMENSIONS OF MATRIX 2 (p q): ";
-    cin >> p >> q;
+    int rows, cols;
+    cout << "ENTER DIMENSIONS OF MATRIX(m n): ";
+    cin >> rows >> cols;
 
-    vector<vector<int>> matrix_A(m, vector<int>(n));
-    vector<vector<int>> matrix_B(p, vector<int>(q));
-    setMatrix(matrix_A, m, n);
-    cout << "\n-------------------------------------------------------" << endl;
-    setMatrix(matrix_B, m, n);
-    cout << "\n-------------------------------------------------------" << endl;
-    cout << "MATRIX A: " << endl;
-    cout << "------------" << endl;
-    getMatrix(matrix_A, m, n);
-    cout << "\n-------------------------------------------------------" << endl;
-    cout << "MATRIX B: " << endl;
-    cout << "------------" << endl;
-    getMatrix(matrix_B, m, n);
-    cout << "\n-------------------------------------------------------" << endl;
-    MatrixAddition(matrix_A, matrix_B, m, n, p, q);
-    cout << "\n-------------------------------------------------------" << endl;
-    MatrixSubtraction(matrix_A, matrix_B, m, n, p, q);
-    cout << "\n-------------------------------------------------------" << endl;
-    MatrixMultiplication(matrix_A, matrix_B, m, n, p, q);
-    cout << "\n-------------------------------------------------------" << endl;
+    Matrix A(rows, cols);
 
+    cout << "\nMATRIX A" << endl;
+    A.input();
+
+    Matrix B(rows, cols);
+    cout << "\nMATRIX B" << endl;
+    B.input();
+
+    Matrix sum = A.add(B);
+    cout << "\n-------------------------------------------------------" << endl;
+    cout << "SUM: " << endl;
+    sum.display();
+
+    cout << "\n-------------------------------------------------------" << endl;
+    Matrix product = A.product(B);
+    cout << "Product: " << endl;
+    product.display();
+    cout << "\n-------------------------------------------------------" << endl;
     return 0;
 }
