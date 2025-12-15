@@ -242,13 +242,8 @@ void Graph::DFS(int src)
         cout << "Invalid source vertex.\n";
         return;
     }
-    if (src < 0 || src >= getVcount())
-    {
-        cout << "Invalid source vertex.\n";
-        return;
-    }
     bool *visited = new bool[getVcount()]();
-
+ 
     stack<int> S;
     S.push(src);
 

@@ -16,15 +16,15 @@ int main()
     tree.insert(80);
 
     cout << "Inorder Traversal: ";
-    tree.inorder(); // Expected: 20 30 40 50 60 70 80
+    tree.inorder(); 
     cout << endl;
 
     cout << "Preorder Traversal: ";
-    tree.preorder(); // Expected: 50 30 20 40 70 60 80
+    tree.preorder(); 
     cout << endl;
 
     cout << "Postorder Traversal: ";
-    tree.postorder(); // Expected: 20 40 30 60 80 70 50
+    tree.postorder(); 
     cout << endl;
 
     // Search

@@ -18,6 +18,8 @@ int main()
     Graph g;
     g.createGraph(v_count, e_count);
 
+    cout << "\n\n=======================================================" << endl;
+
     cout << "Graph created successfully ✅";
 
     cout << "\n=======================================================" << endl;
